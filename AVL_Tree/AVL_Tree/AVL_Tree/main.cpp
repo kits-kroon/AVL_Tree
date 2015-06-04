@@ -13,8 +13,8 @@ void PrintUnit(const Unit & unit);
 
 int main()
 {
-    //IntTreeTest();
-    UnitTreeTest();
+    IntTreeTest();
+    //UnitTreeTest();
     return 0;
 }
 
@@ -32,6 +32,8 @@ void IntTreeTest()
 
     cout << endl << "Pre Order" << endl;
     tree.PreOrder(print);
+    cout << endl << "In Order" << endl;
+    tree.InOrder(print);
 }
 
 void UnitTreeTest()
@@ -63,8 +65,8 @@ void UnitTreeTest()
 
     cout << "Pre Order" << endl << endl;
     tree.PreOrder(print);
-    cout << endl <<"Post Order" << endl << endl;
-    tree.PostOrder(print);
+    cout << endl <<"In Order" << endl << endl;
+    tree.InOrder(print);
 }
 
 void PrintData(const int & i)

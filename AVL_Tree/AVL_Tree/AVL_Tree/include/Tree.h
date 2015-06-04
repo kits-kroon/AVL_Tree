@@ -324,7 +324,7 @@ typename Tree<T>::node * Tree<T>::Insert(T newData, node * parent)
 
     if(newData < parent -> data)
         parent -> left = Insert(newData, parent -> left);
-    else
+    else if(parent -> data < newData)
         parent -> right = Insert(newData, parent -> right);
 
     return Balance(parent);
