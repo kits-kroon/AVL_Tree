@@ -32,6 +32,8 @@ void IntTreeTest()
 
     cout << endl << "Pre Order" << endl;
     tree.PreOrder(print);
+    cout << endl << "In Order" << endl;
+    tree.InOrder(print);
 }
 
 void UnitTreeTest()
@@ -63,8 +65,33 @@ void UnitTreeTest()
 
     cout << "Pre Order" << endl << endl;
     tree.PreOrder(print);
-    cout << endl <<"Post Order" << endl << endl;
-    tree.PostOrder(print);
+    cout << endl <<"In Order" << endl << endl;
+    tree.InOrder(print);
+
+    inFile.close();
+
+    cout << endl;
+    ifstream newFile("unitInput.csv");
+    while(getline(newFile, unitId, ','))
+    {
+        Unit searchUnit;
+
+        getline(newFile, unitName, ',');
+        getline(newFile, credits);
+
+        searchUnit.SetId(unitId);
+        searchUnit.SetName(unitName);
+        searchUnit.SetCredits(atol(credits.c_str()));
+
+        if(tree.Search(searchUnit, print))
+        {
+
+        }
+        else
+        {
+            cout << "Test Failed" << endl;
+        }
+    }
 }
 
 void PrintData(const int & i)
