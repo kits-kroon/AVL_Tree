@@ -1,5 +1,5 @@
-#ifndef Tree_H
-#define Tree_H
+#ifndef BinaryTree_H
+#define BinaryTree_H
 
 #include <cstddef>
 #include <iostream>
@@ -7,11 +7,11 @@
 using namespace std;
 
         /**
-         * @class Tree
-         * @brief A binary search tree data structure
+         * @class BinaryTree
+         * @brief An AVL Binary Search Tree
          *
-         * Allows the use of a binary tree, contains appropriate methods
-         * for binary tree traversal as well as other functions.
+         * Allows the use of an AVL Binary Search tree, as this tree is an AVL
+         * search tree it is self balancing.
          *
          * @author Jake Kroon
          * @version 01
@@ -21,7 +21,7 @@ using namespace std;
          */
 
 template <class T>
-class Tree
+class BinaryTree
 {
     public:
 
@@ -33,17 +33,17 @@ class Tree
              *
              * @return void
              */
-        Tree();
+        BinaryTree();
 
             /**
              * @brief Copy Constructor
              *
-             * Deep copies the object passed in, into a new Tree object
+             * Deep copies the object passed in, into a new BinaryTree object
              *
-             * @param rhs - a constant reference to a Tree object
+             * @param rhs - a constant reference to a BinaryTree object
              * @return void
              */
-        Tree(const Tree & rhs);
+        BinaryTree(const BinaryTree & rhs);
 
             /**
              * @brief Destructor
@@ -52,12 +52,12 @@ class Tree
              *
              * @return void
              */
-        ~Tree();
+        ~BinaryTree();
 
             /**
-             * @brief Insert data into the tree
+             * @brief Insert data into the BinaryTree
              *
-             * Insert new data into the tree and will automatically
+             * Insert new data into the BinaryTree and will automatically
              * sort the data. This requires the opertor < to be
              * overloaded for the chosen data type.
              *
@@ -69,7 +69,7 @@ class Tree
             /**
              * @brief Processes the data in an in order way
              *
-             * Traverses the binary tree in order, performs
+             * Traverses the binary BinaryTree in order, performs
              * an operation on the data at each leaf
              *
              * @param travFunc - A pointer to a function that will act on the data of each node
@@ -80,7 +80,7 @@ class Tree
             /**
              * @brief Processes the data in a pre order way
              *
-             * Traverses the binary tree pre order, performs
+             * Traverses the binary BinaryTree pre order, performs
              * an operation on the data at each leaf
              *
              * @param travFunc - A pointer to a function that will act on the data of each node
@@ -91,7 +91,7 @@ class Tree
             /**
              * @brief Processes the data in a post order way
              *
-             * Traverses the binary tree post order, performs
+             * Traverses the binary BinaryTree post order, performs
              * an operation on the data at each leaf
              *
              * @param travFunc - A pointer to a function that will act on the data of each node
@@ -113,16 +113,16 @@ class Tree
         bool Search(T key, void(*searchFunc)(const T & data));
 
             /**
-             * @brief Makes a deep copied version of the Tree being assigned
+             * @brief Makes a deep copied version of the BinaryTree being assigned
              *
-             * Makes a new Tree object that is a deep copy of the object
-             * on the right hand side of the  = operator. This new Tree
+             * Makes a new BinaryTree object that is a deep copy of the object
+             * on the right hand side of the  = operator. This new BinaryTree
              * object is then returned.
              *
-             * @param rhs - A constant reference to a Tree object
-             * @return Tree - A deep copy of the binary tree assigned
+             * @param rhs - A constant reference to a BinaryTree object
+             * @return BinaryTree - A deep copy of the binary BinaryTree assigned
              */
-        Tree operator = (const Tree & rhs);
+        BinaryTree operator = (const BinaryTree & rhs);
 
     private:
 
@@ -132,29 +132,20 @@ class Tree
              *
              * This is the node that is used by the program, there is a left and right
              * pointer as well as data of the templated data type defined by the user.
-             *
+             * The height of the node is also stored in this struct
+             * Contains a constructor.
              */
-        struct node
-        {
-            unsigned char height;
-            node* left;
-            node* right;
-            T data;
-            node(T d)
-            {
-                data = d;
-                left = NULL;
-                right = NULL;
-                height = 1;
-            }
-        };
+        struct node;
 
-        node *root; /** The root node of the tree */
+        node *root; /** The root node of the BinaryTree */
+//****************************************************************************
+//                  IN ORDER PROCESSING                                      *
+//****************************************************************************
 
             /**
              * @brief Inserts new data into
              *
-             * Allows the insertion of new data into the tree, automatically
+             * Allows the insertion of new data into the BinaryTree, automatically
              * orders the data. If inserting with a class object, overload the
              * comparison operator '<' so that comparisons between objects
              * can be made.
@@ -209,7 +200,7 @@ class Tree
             /**
              * @brief A method for deep copying
              *
-             * Creates a deep copy of the tree passed in from the node
+             * Creates a deep copy of the BinaryTree passed in from the node
              * entered as a parameter
              *
              * @param parent - a pointer to a node, this is for recursion
@@ -229,21 +220,89 @@ class Tree
              */
         bool SearchHelper(T key, node *& parent, void(*searchFunc)(const T & data));
 
-        unsigned char Height(node * parent);
+            /**
+             * @brief Gets the height of a node
+             *
+             * Checks that a node has been set, if it has it returns the height
+             * if the node has not been set zero is returned.
+             *
+             * @param parent - The node to get the height of
+             * @return height - An unsigned called that represents the height of the tree
+             */
+        unsigned Height(node * parent);
 
-        int BalanceFactor(node * parent);
+            /**
+             * @brief Gets the height difference between two nodes
+             *
+             * Finds the difference in height between the left and right subtrees
+             * of a node.
+             *
+             * @param parent - The node to compare subtree heights of
+             * @return height - The height difference as an integer
+             */
+        int BalanceDifference(node * parent);
 
+            /**
+             * @brief Fixes the height of a node
+             *
+             * Recalculates the position of a node (i.e. height)
+             * by finding the heights of the nodes in the subtree.
+             *
+             * @param parent - The node to set the height of
+             * @return void
+             */
         void FixHeight(node * parent);
 
+            /**
+             * @brief Rotates a node to the right
+             *
+             * Rotates nodes to the right to balance the tree
+             *
+             * @param parent - The node to perform rotation on
+             * @return rotatedNode - The new node that replaces the one passed in
+             */
         node * RotateRight(node * parent);
 
+            /**
+             * @brief Rotates a node to the left
+             *
+             * Rotates nodes to the left to balance the tree
+             *
+             * @param parent - The node to perform rotation on
+             * @return rotatedNode - The new node that replaces the one passed in
+             */
         node * RotateLeft(node * parent);
 
+            /**
+             * @brief Balances the tree
+             *
+             * Peforms rotations on the parent node where required
+             * checks the balance and balances the tree where appropriate.
+             *
+             * @param parent - The node to check and perform balancing on
+             * @return balancedNode - A balanced version of the tree passed in
+             */
         node * Balance(node * parent);
 };
 
 template <class T>
-Tree<T>::Tree()
+struct BinaryTree<T>::node
+{
+    unsigned height; // Height of the subtree
+    node* left;      // Left subtree root
+    node* right;     // Right subtree root
+    T data;          // Data contained in the node
+    node(T d)        // Constructor got struct
+    {
+        data = d;
+        left = NULL;
+        right = NULL;
+        height = 1;
+    }
+};
+
+template <class T>
+BinaryTree<T>::BinaryTree()
 {
     root = NULL;
 }
@@ -253,13 +312,13 @@ Tree<T>::Tree()
 //****************************************************************************
 
 template <class T>
-Tree<T>::~Tree()
+BinaryTree<T>::~BinaryTree()
 {
     Clear(root);
 }
 
 template <class T>
-void Tree<T>::Clear(node * parent)
+void BinaryTree<T>::Clear(node * parent)
 {
     if(parent != NULL)
     {
@@ -275,49 +334,50 @@ void Tree<T>::Clear(node * parent)
 //****************************************************************************
 
 template <class T>
-Tree<T>::Tree(const Tree & rhs)
+BinaryTree<T>::BinaryTree(const BinaryTree & rhs)
 {
     root = Copy(rhs.root);
 }
 
 template <class T>
-typename Tree<T>::node * Tree<T>::Copy(const node * parent)
+typename BinaryTree<T>::node * BinaryTree<T>::Copy(const node * parent)
 {
     if(parent == NULL)
     {
         return NULL;
     }
 
-    node *newNode = new node();
+    node *newNode;
+    newNode = new node(parent -> data);
+
     newNode -> right = NULL;
     newNode -> left  = NULL;
 
-    newNode -> data  = parent -> data;
-    newNode -> right = Copy(parent -> left);
-    newNode -> left  = Copy(parent -> right);
+    newNode -> right = Copy(parent -> right);
+    newNode -> left  = Copy(parent -> left);
 
     return newNode;
 }
 
 template <class T>
-Tree<T> Tree<T>::operator = (const Tree & rhs)
+BinaryTree<T> BinaryTree<T>::operator = (const BinaryTree & rhs)
 {
-    Tree newBT(rhs);
+    BinaryTree newBT(rhs);
     return newBT;
 }
 
 //****************************************************************************
-//                  INSERTING INTO THE TREE                                  *
+//                  INSERTING INTO THE BINARY TREE                           *
 //****************************************************************************
 
 template <class T>
-void Tree<T>::Insert(T newData)
+void BinaryTree<T>::Insert(T newData)
 {
     root = Insert(newData, root);
 }
 
 template <class T>
-typename Tree<T>::node * Tree<T>::Insert(T newData, node * parent)
+typename BinaryTree<T>::node * BinaryTree<T>::Insert(T newData, node * parent)
 {
     if(parent == NULL)
         return new node(newData);
@@ -331,24 +391,24 @@ typename Tree<T>::node * Tree<T>::Insert(T newData, node * parent)
 }
 
 //****************************************************************************
-//                        ROTATING THE TREE                                  *
+//                        ROTATING THE BINARYTREE                            *
 //****************************************************************************
 
 template <class T>
-typename Tree<T>::node * Tree<T>::Balance(node * parent)
+typename BinaryTree<T>::node * BinaryTree<T>::Balance(node * parent)
 {
     FixHeight(parent);
 
-    if(BalanceFactor(parent) == 2)
+    if(BalanceDifference(parent) == 2)
     {
-        if(BalanceFactor(parent -> right) < 0)
+        if(BalanceDifference(parent -> right) < 0)
             parent -> right = RotateRight( parent -> right );
         return RotateLeft(parent);
     }
 
-    if(BalanceFactor(parent) == -2)
+    if(BalanceDifference(parent) == -2)
     {
-        if(BalanceFactor(parent -> left) > 0)
+        if(BalanceDifference(parent -> left) > 0)
             parent -> left = RotateLeft( parent -> left );
         return RotateRight(parent);
     }
@@ -357,7 +417,7 @@ typename Tree<T>::node * Tree<T>::Balance(node * parent)
 }
 
 template <class T>
-typename Tree<T>::node * Tree<T>::RotateRight(node * parent) // rotate the right portion
+typename BinaryTree<T>::node * BinaryTree<T>::RotateRight(node * parent)
 {
 	node * y = parent -> left;
 	parent -> left = y -> right;
@@ -370,7 +430,7 @@ typename Tree<T>::node * Tree<T>::RotateRight(node * parent) // rotate the right
 }
 
 template <class T>
-typename Tree<T>::node * Tree<T>::RotateLeft(node * parent) // rotate the left portion
+typename BinaryTree<T>::node * BinaryTree<T>::RotateLeft(node * parent)
 {
 	node * x = parent -> right;
 	parent -> right = x -> left;
@@ -382,40 +442,50 @@ typename Tree<T>::node * Tree<T>::RotateLeft(node * parent) // rotate the left p
 	return x;
 }
 
-// Can operate on empty (empty trees)
+//****************************************************************************
+//                      HEIGHT FUNCTIONS                                     *
+//****************************************************************************
+
+// Can operate on empty (empty BinaryTrees)
 template <class T>
-unsigned char Tree<T>::Height(node * parent)
+unsigned BinaryTree<T>::Height(node * parent)
 {
+    // If parent == NULL, return zero else return height
 	return parent ? parent -> height:0;
 }
 
 // Calculates balance factor, works with non zero only
 template <class T>
-int Tree<T>::BalanceFactor(node * parent)
+int BinaryTree<T>::BalanceDifference(node * parent)
 {
 	return Height(parent -> right) - Height(parent -> left);
 }
 
 // Retrieves the correct value for the height field
 template <class T>
-void Tree<T>::FixHeight(node * parent)
+void BinaryTree<T>::FixHeight(node * parent)
 {
-	unsigned char hl = Height(parent -> left);
-	unsigned char hr = Height(parent -> right);
-	parent -> height = (hl > hr ? hl : hr) + 1;
+	unsigned hl = Height(parent -> left);
+	unsigned hr = Height(parent -> right);
+
+	if(hl > hr)
+        parent -> height = hl + 1;
+    else
+        parent -> height = hr + 1;
 }
+
 //****************************************************************************
 //                  IN ORDER PROCESSING                                      *
 //****************************************************************************
 
 template <class T>
-void Tree<T>::InOrder(void(*travFunc)(const T & data))
+void BinaryTree<T>::InOrder(void(*travFunc)(const T & data))
 {
     InOrderHelper(root, travFunc);
 }
 
 template <class T>
-void Tree<T>::InOrderHelper(node *& parent, void(*travFunc)(const T & data))
+void BinaryTree<T>::InOrderHelper(node *& parent, void(*travFunc)(const T & data))
 {
     if(parent != NULL)
     {
@@ -430,13 +500,13 @@ void Tree<T>::InOrderHelper(node *& parent, void(*travFunc)(const T & data))
 //****************************************************************************
 
 template <class T>
-void Tree<T>::PreOrder(void(*travFunc)(const T & data))
+void BinaryTree<T>::PreOrder(void(*travFunc)(const T & data))
 {
     PreOrderHelper(root, travFunc);
 }
 
 template <class T>
-void Tree<T>::PreOrderHelper(node *& parent, void(*travFunc)(const T & data))
+void BinaryTree<T>::PreOrderHelper(node *& parent, void(*travFunc)(const T & data))
 {
     if(parent != NULL)
     {
@@ -451,13 +521,13 @@ void Tree<T>::PreOrderHelper(node *& parent, void(*travFunc)(const T & data))
 //****************************************************************************
 
 template <class T>
-void Tree<T>::PostOrder(void(*travFunc)(const T & data))
+void BinaryTree<T>::PostOrder(void(*travFunc)(const T & data))
 {
     PostOrderHelper(root, travFunc);
 }
 
 template <class T>
-void Tree<T>::PostOrderHelper(node *& parent, void(*travFunc)(const T & data))
+void BinaryTree<T>::PostOrderHelper(node *& parent, void(*travFunc)(const T & data))
 {
     if(parent != NULL)
     {
@@ -472,7 +542,7 @@ void Tree<T>::PostOrderHelper(node *& parent, void(*travFunc)(const T & data))
 //****************************************************************************
 
 template <class T>
-bool Tree<T>::Search(T key ,void(*searchFunc)(const T & data))
+bool BinaryTree<T>::Search(T key ,void(*searchFunc)(const T & data))
 {
     bool found;
     found = SearchHelper(key, root, searchFunc);
@@ -481,7 +551,7 @@ bool Tree<T>::Search(T key ,void(*searchFunc)(const T & data))
 }
 
 template<class T>
-bool Tree<T>::SearchHelper(T key, node *& parent, void(*searchFunc)(const T & data))
+bool BinaryTree<T>::SearchHelper(T key, node *& parent, void(*searchFunc)(const T & data))
 {
     if(parent != NULL)
     {
@@ -504,4 +574,4 @@ bool Tree<T>::SearchHelper(T key, node *& parent, void(*searchFunc)(const T & da
     return false;
 }
 
-#endif // Tree_H
+#endif // BinaryTree_H
