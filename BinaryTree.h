@@ -2,7 +2,6 @@
 #define BinaryTree_H
 
 #include <cstddef>
-#include <iostream>
 
 using namespace std;
 
