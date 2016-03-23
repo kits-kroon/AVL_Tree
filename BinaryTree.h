@@ -287,7 +287,7 @@ class BinaryTree
 template <class T>
 struct BinaryTree<T>::node
 {
-    unsigned height; // Height of the subtree
+    unsigned char height; // Height of the subtree
     node* left;      // Left subtree root
     node* right;     // Right subtree root
     T data;          // Data contained in the node
